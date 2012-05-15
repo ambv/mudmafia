@@ -1,0 +1,24 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block title %}{{ title }} | {% trans 'MudMafia' %}{% endblock %}
+
+{% block extrastyle %}
+<style>
+#header{ color: #b8b8b8; background-color: #403040; border-bottom: solid 3px #796479; }
+
+#branding h1{ color: #fff; }
+.module h2, .module caption, .inline-group h2 { background:#ccc
+url(/static/admin/img/nav-bg.gif) bottom left repeat-x; color: #796479;
+}
+a:link, a:visited { color: #796479; }
+a.section:link, a.section:visited { color: #5a355a; }
+.autocomplete { width: 220px; }
+</style>
+{% endblock %}
+
+{% block branding %}
+<h1 id="site-name" > {% trans 'MudMafia' %}</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}
