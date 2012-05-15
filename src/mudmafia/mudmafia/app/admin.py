@@ -31,8 +31,9 @@ from django.contrib.auth.models import User
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import ugettext_lazy as _
 from lck.django.activitylog.admin import UserIPInline, UserAgentInline
+from lck.django.common.admin import ModelAdmin
 
-from mudmafia.app.models import Profile
+from mudmafia.app.models import Profile, License, LicenseType
 
 
 from django_evolution.models import Version as _Version, Evolution as _Evolution
@@ -73,3 +74,19 @@ class ProfileAdmin(UserAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, ProfileAdmin)
+
+
+class LicenseTypeAdmin(ModelAdmin):
+    list_display = ('name', 'created', 'created_by')
+    search_fields = ('name',)
+
+admin.site.register(LicenseType, LicenseTypeAdmin)
+
+
+class LicenseAdmin(ModelAdmin):
+    list_display = ('name', 'description', 'license_type', 'issue_date',
+        'valid_for', 'created', 'created_by')
+    list_filter = ('license_type', 'valid_for')
+    search_fields = ('name', 'description',)
+
+admin.site.register(License, LicenseAdmin)

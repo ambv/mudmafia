@@ -32,6 +32,7 @@ from django.dispatch import receiver
 from django.utils.translation import ugettext_lazy as _
 
 from lck.django.activitylog.models import MonitoredActivity
+from lck.django.common.models import TimeTrackable, EditorTrackable, Named
 from lck.django.profile.models import BasicInfo, ActivationSupport,\
         GravatarSupport
 
@@ -41,6 +42,39 @@ class Profile(BasicInfo, ActivationSupport, GravatarSupport,
     class Meta:
         verbose_name = _("profile")
         verbose_name_plural = _("profiles")
+
+    def __unicode__(self):
+        return self.nick
+
+
+class LicenseType(Named, TimeTrackable, EditorTrackable):
+    class Meta:
+        verbose_name = _("license type")
+        verbose_name_plural = _("license types")
+
+    def get_editor_from_request(self, request):
+        return request.user.get_profile()
+
+
+
+class License(TimeTrackable, EditorTrackable):
+    name = db.CharField(_("name"), max_length=100)
+    description = db.TextField(_("description"))
+    license_type = db.ForeignKey(LicenseType,
+        verbose_name=_("license type"))
+    issue_date = db.DateField(_("issue date"), auto_now_add=True)
+    valid_for = db.PositiveIntegerField(_("valid for"),
+        default=30, help_text=_("In days."))
+
+    class Meta:
+        verbose_name = _("license")
+        verbose_name_plural = _("licenses")
+
+    def __unicode__(self):
+        return self.name
+
+    def get_editor_from_request(self, request):
+        return request.user.get_profile()
 
 
 @receiver(db.signals.post_save, sender=User)
