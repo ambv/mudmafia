@@ -62,7 +62,7 @@ class License(TimeTrackable, EditorTrackable):
     description = db.TextField(_("description"))
     license_type = db.ForeignKey(LicenseType,
         verbose_name=_("license type"))
-    issue_date = db.DateField(_("issue date"), auto_now_add=True)
+    issue_date = db.DateField(_("issue date"))
     valid_for = db.PositiveIntegerField(_("valid for"),
         default=30, help_text=_("In days."))
 
